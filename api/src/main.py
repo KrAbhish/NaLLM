@@ -79,9 +79,15 @@ async def questionProposalsForCurrentDb(payload: questionProposalPayload):
 
     questionProposalGenerator = QuestionProposalGenerator(
         database=neo4j_connection,
+        # llm=OpenAIChat(
+        #     openai_api_key=api_key,
+        #     model_name="gpt-3.5-turbo-0613",
+        #     max_tokens=512,
+        #     temperature=0.8,
+        # ),
         llm=OpenAIChat(
             openai_api_key=api_key,
-            model_name="gpt-3.5-turbo-0613",
+            # model_name="gpt-3.5-turbo-0613",
             max_tokens=512,
             temperature=0.8,
         ),
@@ -133,9 +139,14 @@ async def websocket_endpoint(websocket: WebSocket):
                 model_name=data.get("model_name", "gpt-3.5-turbo-0613"),
             )
             summarize_results = SummarizeCypherResult(
+                # llm=OpenAIChat(
+                #     openai_api_key=api_key,
+                #     model_name="gpt-3.5-turbo-0613",
+                #     max_tokens=128,
+                # )
                 llm=OpenAIChat(
                     openai_api_key=api_key,
-                    model_name="gpt-3.5-turbo-0613",
+                    # model_name="gpt-3.5-turbo-0613",
                     max_tokens=128,
                 )
             )
@@ -205,8 +216,11 @@ async def root(payload: ImportPayload):
     try:
         result = ""
 
+        # llm = OpenAIChat(
+        #     openai_api_key=api_key, model_name="gpt-3.5-turbo-16k", max_tokens=4000
+        # )
         llm = OpenAIChat(
-            openai_api_key=api_key, model_name="gpt-3.5-turbo-16k", max_tokens=4000
+            openai_api_key=api_key, max_tokens=4000
         )
 
         if not payload.neo4j_schema:
@@ -246,9 +260,14 @@ async def companyInformation(payload: companyReportPayload):
         )
     api_key = openai_api_key if openai_api_key else payload.api_key
 
+    # llm = OpenAIChat(
+    #     openai_api_key=api_key,
+    #     model_name="gpt-3.5-turbo-16k-0613",
+    #     max_tokens=512,
+    # )
     llm = OpenAIChat(
         openai_api_key=api_key,
-        model_name="gpt-3.5-turbo-16k-0613",
+        # model_name="gpt-3.5-turbo-16k-0613",
         max_tokens=512,
     )
     print("Running company report for " + payload.company)
