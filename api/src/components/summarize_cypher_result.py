@@ -68,9 +68,12 @@ class SummarizeCypherResult(BaseComponent):
         results: List[Dict[str, Any]],
         callback: Callable[[str], Awaitable[Any]] = None,
     ) -> Dict[str, str]:
+        print("run_async")
         messages = [
             {"role": "system", "content": system},
             {"role": "user", "content": self.generate_user_prompt(question, results)},
         ]
         output = await self.llm.generateStreaming(messages, onTokenCallback=callback)
+        print("output", output)
+        print("".join(output))
         return "".join(output)

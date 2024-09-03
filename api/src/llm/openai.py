@@ -56,7 +56,8 @@ class OpenAIChat(BaseLLM):
         self,
         messages: List[str],
     ) -> str:
-        print("openai.__version__", openai.__version__)
+        # print("openai.__version__", openai.__version__)
+        print("In generate")
         try:
             completions = self.client.chat.completions.create(
                             model=self.deployment,
@@ -79,7 +80,9 @@ class OpenAIChat(BaseLLM):
         messages: List[str],
         onTokenCallback=Callable[[str], None],
     ) -> str:
-        print("openai.__version__", openai.__version__)
+        # print("openai.__version__", openai.__version__)
+        print("In generateStreaming")
+        print(messages)
         result = []
         # completions = openai.ChatCompletion.create(
         #     model=self.model,
@@ -95,12 +98,24 @@ class OpenAIChat(BaseLLM):
                             stream=True,
                         )
         result = []
+        print(type(completions))
+        print(completions)
         for message in completions:
             # Process the streamed messages or perform any other desired action
-            delta = message["choices"][0]["delta"]
-            if "content" in delta:
-                result.append(delta["content"])
-            await onTokenCallback(message)
+            print("message", message)
+            print(message.choices[0].delta.content)
+            delta = message.choices[0].delta
+            print("result", result)
+            if delta.content:
+                result.append(delta.content)
+            # print(delta)
+            # if "content" in delta:
+            #     print()
+            #     result.append(delta["content"])
+            # if len
+            print("result", result)
+            # await onTokenCallback(result)
+            # print("onTokenCallback")
         return result
 
     def num_tokens_from_string(self, string: str) -> int:
